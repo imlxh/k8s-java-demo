@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1 
+kind: Deployment 
+metadata:
+  name: demo-java-pvc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-java-pvc
+    spec:
+      containers:
+      - name: demo-java-pvc
+        image: hub.c.163.com/lxh2898396/demo:1
+        volumeMounts:
+        - name: jdk8
+          mountPath: /opt/jdk8
+        - name: java
+          mountPath: /opt/java
+
+        ports:
+        - containerPort: 8083
+      volumes:
+      - name: jdk8
+        persistentVolumeClaim:
+          claimName: nfs-pvc-demo-jdk
+      - name: java
+        persistentVolumeClaim:
+          claimName: nfs-pvc-demo-java
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-java-pvc
+spec:
+  type: NodePort
+  ports:
+  - port: 38083
+    protocol: TCP
+    targetPort: 8083
+    nodePort: 38083
+  selector:
+    app: demo-java-pvc
+

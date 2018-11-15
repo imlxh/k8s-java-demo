@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1 
+kind: Deployment 
+metadata:
+  name: demo-3
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-3
+    spec:
+      containers:
+      - name: demo-3
+        image: hub.c.163.com/lxh2898396/demo:latest
+        volumeMounts:
+        - name: jdk8
+          mountPath: /opt/jdk8
+        - name: java
+          mountPath: /opt/java
+
+        ports:
+        - containerPort: 8083
+      volumes:
+      - name: jdk8
+        hostPath:
+          path: /data/app/jdk8
+      - name: java
+        hostPath:
+          path: /data/app/java
+---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: demo-3
+#spec:
+#  type: NodePort
+#  ports:
+#  - port: 18080
+#    protocol: TCP
+#    targetPort: 8080
+#    nodePort: 18080
+#  selector:
+#    app: demo-3

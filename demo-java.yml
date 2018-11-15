@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1 
+kind: Deployment 
+metadata:
+  name: demo-java
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-java
+    spec:
+      containers:
+      - name: demo-java
+        image: hub.c.163.com/lxh2898396/demo:1
+        volumeMounts:
+        - name: jdk8
+          mountPath: /opt/jdk8
+        - name: java
+          mountPath: /opt/java
+
+        ports:
+        - containerPort: 8083
+      volumes:
+      - name: jdk8
+        nfs:
+          server: 10.9.37.148
+          path: /data/app/jdk8
+      - name: java
+        nfs:
+          server: 10.9.37.148
+          path: /data/app/java
+---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: demo-java
+#spec:
+#  type: NodePort
+#  ports:
+#  - port: 28083
+#    protocol: TCP
+#    targetPort: 8083
+#    nodePort: 28083
+#  selector:
+#    app: demo-java
+

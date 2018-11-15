@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-java
+spec:
+  type: NodePort
+  ports:
+  - port: 28083
+    protocol: TCP
+    targetPort: 8083
+    nodePort: 28083
+  selector:
+    app: demo-java

@@ -1,0 +1,22 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: elasticsearch02
+  labels: 
+    k8s-app: elasticsearch02
+spec:
+  selector:
+    matchLabels:
+      k8s-app: elasticsearch02
+  replicas: 1 # Update the replicas from 2 to 4
+  template:
+    metadata:
+      labels:
+        k8s-app: elasticsearch02
+    spec:
+      containers:
+      - name: elasticsearch02
+        image: harbor.imlxh.cn/test/elasticsearch:6.4.1
+        env:
+        - name: "discovery.type"
+          value: "single-node"

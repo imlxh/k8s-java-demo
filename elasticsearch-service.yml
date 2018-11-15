@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch02
+  labels: 
+    k8s-app: elasticsearch02
+spec:
+  type: LoadBalancer
+  clusterIP: 10.68.146.95
+  ports:
+  - name: elasticsearch02-9200
+    protocol: TCP
+    port: 29200
+    targetPort: 9200
+    nodePort: 29200
+  - name: elasticsearch02-9300
+    protocol: TCP
+    port: 29300
+    targetPort: 9300
+    nodePort: 29300
+  selector:
+    k8s-app: elasticsearch02
+

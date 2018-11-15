@@ -1,0 +1,49 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  labels: 
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: docker.io/jenkins/jenkins:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
+      volumes:
+      - name: jenkins-home
+        persistentVolumeClaim:
+          claimName: nfs-pvc-jenkins
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  labels:
+    name: jenkins
+spec:
+  type: NodePort
+  ports:
+  - name: jenkins
+    port: 38080 
+    targetPort: 8080
+    nodePort: 30009
+  - name: jenkins-agent
+    port: 50000 
+    targetPort: 50000
+    nodePort: 30010
+  selector:
+    app: jenkins
